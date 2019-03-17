@@ -1,6 +1,6 @@
 # Discrete Event Simulator
 
-
+![Simulator](Simulator.png?raw=true)
 ## Usage
 
 	>>> python run.py
