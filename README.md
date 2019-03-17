@@ -1,4 +1,4 @@
-# Discrete Event Simulator
+# Multiprocessor Discrete Event Simulator
 
 ![Simulator](Simulator.png?raw=true)
 ## Usage
