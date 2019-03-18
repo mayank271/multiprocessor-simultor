@@ -85,11 +85,6 @@ if __name__ == '__main__':
 
     output_file = input("Specify output file (eg: output.txt): ")
 
-
-    # print()
-    # for p in packet_list:
-    #     print(p)
-
     events = sorted(events, key=lambda x: x.time)
 
     master = master_node.MasterNode(number_of_processors=NUMBER_OF_NODES)
@@ -121,13 +116,3 @@ if __name__ == '__main__':
         output(output_file, outputs)
     except:
         print("Encountered Error while writing {}".format(output_file))
-
-
-    # print()
-    # print("---------------------")
-    # print("------ Summary ------")
-    # print("---------------------")
-    # print("Node ID: [Packet IDs]")
-    # for node in master.node_heap:
-    #     print("Node {} : {}".format(node.id, node.packets_scheduled))
-    # print("Dropped: {}".format(master.dropped_packets))
