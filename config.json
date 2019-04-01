@@ -1,6 +1,6 @@
 [
   {
-    "number_of_packets": 20,
+    "packet_rate": 20,
     "number_of_nodes" : 2,
     "simulation_start_time": 0,
     "simulation_end_time": 50,

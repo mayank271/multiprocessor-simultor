@@ -9,14 +9,14 @@ def get_config():
     """
     with open("config.json") as f:
         data = json.load(f)
-    number_of_packets = 0
+    packet_rate = 0
     number_of_nodes = 0
     start_time = 0
     end_time = 0
     minimum_security = 0
     packet_size = 0
     for item in data:
-        number_of_packets = item['number_of_packets']
+        packet_rate = item['packet_rate']
         number_of_nodes = item['number_of_nodes']
         start_time = item['simulation_start_time']
         end_time = item['simulation_end_time']
@@ -24,13 +24,13 @@ def get_config():
         is_set_min_security = item['set_minimum_security_level']
         if is_set_min_security:
             minimum_security = item['minimum_security_level_value']
-    return number_of_packets, number_of_nodes, start_time, end_time, packet_size, minimum_security
+    return packet_rate, number_of_nodes, start_time, end_time, packet_size, minimum_security
 
 
 def output(file, parameters):
     f = open(file, "w+")
     f.write("# Simulation Summary\n")
-    f.write("Number of packets: {}\n".format(parameters['number_of_packets']))
+    f.write("Packet Rate: {}\n".format(parameters['packet_rate']))
     f.write("Number of nodes: {}\n".format(parameters['number_of_nodes']))
     f.write("Start: {}\n".format(parameters['start_time']))
     f.write("End: {}\n".format(parameters['end_time']))
@@ -70,11 +70,11 @@ def random_packets(number_packets, start, end, packet_size, min_security):
 
 if __name__ == '__main__':
 
-    NUMBER_OF_PACKETS, NUMBER_OF_NODES, START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY = get_config()
-    packet_list, events = random_packets(NUMBER_OF_PACKETS, START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY)
+    PACKET_RATE, NUMBER_OF_NODES, START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY = get_config()
+    packet_list, events = random_packets(PACKET_RATE*(END_TIME-START_TIME), START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY)
 
     outputs = dict()
-    outputs['number_of_packets'] = NUMBER_OF_PACKETS
+    outputs['packet_rate'] = PACKET_RATE
     outputs['number_of_nodes'] = NUMBER_OF_NODES
     outputs['start_time'] = START_TIME
     outputs['end_time'] = END_TIME
@@ -110,9 +110,12 @@ if __name__ == '__main__':
             events = sorted(events, key=lambda x: x.time)
 
     try:
-        outputs['guarantee_ratio'] = (NUMBER_OF_PACKETS - len(master.dropped_packets)) * 100/NUMBER_OF_PACKETS
-        outputs['average_security'] = master.total_security/(NUMBER_OF_PACKETS - len(master.dropped_packets))
-        outputs['average_waiting_time'] = master.total_wait_time/(NUMBER_OF_PACKETS - len(master.dropped_packets))
+        outputs['guarantee_ratio'] = (PACKET_RATE*(END_TIME-START_TIME) - len(master.dropped_packets)) *\
+                                     (100/(PACKET_RATE*(END_TIME-START_TIME)))
+        outputs['average_security'] = master.total_security/((PACKET_RATE*(END_TIME-START_TIME)) -
+                                                             len(master.dropped_packets))
+        outputs['average_waiting_time'] = master.total_wait_time/((PACKET_RATE*(END_TIME-START_TIME)) -
+                                                                  len(master.dropped_packets))
         output(output_file, outputs)
     except:
         print("Encountered Error while writing {}".format(output_file))
