@@ -42,6 +42,26 @@ def output(file, parameters):
     f.write("Average Waiting Time: {}\n".format(parameters['average_waiting_time']))
 
 
+def output_data(file, parameters):
+    print("{}, {}, {}, {}, {}, {}".format(parameters['packet_rate'], parameters['number_of_nodes'],
+                                          parameters['minimum_security'], parameters['guarantee_ratio'],
+                                          parameters['average_security'], parameters['average_waiting_time']))
+    # f = open(file, "a")
+    # f.write(parameters['packet_rate'])
+    # f.write(", ")
+    # f.write(parameters['number_of_nodes'])
+    # f.write(", ")
+    # f.write(parameters['minimum_security'])
+    # f.write(", ")
+    # f.write(parameters['guarantee_ratio'])
+    # f.write(", ")
+    # f.write(parameters['average_security'])
+    # f.write(", ")
+    # f.write(parameters['average_waiting_time'])
+    # f.write("\n")
+    # f.close()
+
+
 def random_packets(number_packets, start, end, packet_size, min_security):
     """
     :param number_packets: Number of packets to be generated
@@ -71,51 +91,118 @@ def random_packets(number_packets, start, end, packet_size, min_security):
 if __name__ == '__main__':
 
     PACKET_RATE, NUMBER_OF_NODES, START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY = get_config()
-    packet_list, events = random_packets(PACKET_RATE*(END_TIME-START_TIME), START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY)
 
-    outputs = dict()
-    outputs['packet_rate'] = PACKET_RATE
-    outputs['number_of_nodes'] = NUMBER_OF_NODES
-    outputs['start_time'] = START_TIME
-    outputs['end_time'] = END_TIME
-    outputs['packet_size'] = PACKET_SIZE
-    outputs['minimum_security'] = MIN_SECURITY
+    MIN_SECURITY = 0
+    while MIN_SECURITY <= 10:
+        PACKET_RATE = 1
+        while PACKET_RATE <= 100:
+            NUMBER_OF_NODES = 2
+            while NUMBER_OF_NODES <= 16:
+                packet_list, events = random_packets(int(PACKET_RATE * (END_TIME - START_TIME)), START_TIME, END_TIME,
+                                                     PACKET_SIZE,
+                                                     MIN_SECURITY)
 
-    packet_list = sorted(packet_list, key=lambda x: x.start)
+                outputs = dict()
+                outputs['packet_rate'] = PACKET_RATE
+                outputs['number_of_nodes'] = NUMBER_OF_NODES
+                outputs['start_time'] = START_TIME
+                outputs['end_time'] = END_TIME
+                outputs['packet_size'] = PACKET_SIZE
+                outputs['minimum_security'] = MIN_SECURITY
 
-    output_file = input("Specify output file (eg: output.txt): ")
+                packet_list = sorted(packet_list, key=lambda x: x.start)
 
-    events = sorted(events, key=lambda x: x.time)
+                output_file = None  # input("Specify output file (eg: output.txt): ")
 
-    master = master_node.MasterNode(number_of_processors=NUMBER_OF_NODES)
+                events = sorted(events, key=lambda x: x.time)
 
-    packet_index = 0
-    while len(events) > 0 and packet_index < len(packet_list):
-        event = events[0]
-        # print()
-        # print(event)
-        events = events[1:]
-        new_event = None
-        if event.category == "arrival":
-            # Arrival event
-            new_event = master.process_event(event, packet_list[packet_index])
-            packet_index += 1
+                master = master_node.MasterNode(number_of_processors=NUMBER_OF_NODES)
 
-        else:
-            # Completion event
-            new_event = master.process_event(event)
+                packet_index = 0
+                while len(events) > 0 and packet_index < len(packet_list):
+                    event = events[0]
+                    # print()
+                    # print(event)
+                    events = events[1:]
+                    new_event = None
+                    if event.category == "arrival":
+                        # Arrival event
+                        new_event = master.process_event(event, packet_list[packet_index])
+                        packet_index += 1
 
-        if new_event is not None:
-            events.append(new_event)
-            events = sorted(events, key=lambda x: x.time)
+                    else:
+                        # Completion event
+                        new_event = master.process_event(event)
 
-    try:
-        outputs['guarantee_ratio'] = (PACKET_RATE*(END_TIME-START_TIME) - len(master.dropped_packets)) *\
-                                     (100/(PACKET_RATE*(END_TIME-START_TIME)))
-        outputs['average_security'] = master.total_security/((PACKET_RATE*(END_TIME-START_TIME)) -
-                                                             len(master.dropped_packets))
-        outputs['average_waiting_time'] = master.total_wait_time/((PACKET_RATE*(END_TIME-START_TIME)) -
-                                                                  len(master.dropped_packets))
-        output(output_file, outputs)
-    except:
-        print("Encountered Error while writing {}".format(output_file))
+                    if new_event is not None:
+                        events.append(new_event)
+                        events = sorted(events, key=lambda x: x.time)
+
+                try:
+                    outputs['guarantee_ratio'] = (PACKET_RATE * (END_TIME - START_TIME) - len(master.dropped_packets)) * \
+                                                 (100 / (PACKET_RATE * (END_TIME - START_TIME)))
+                    outputs['average_security'] = master.total_security / ((PACKET_RATE * (END_TIME - START_TIME)) -
+                                                                           len(master.dropped_packets))
+                    outputs['average_waiting_time'] = master.total_wait_time / (
+                                (PACKET_RATE * (END_TIME - START_TIME)) -
+                                len(master.dropped_packets))
+                    output_data(output_file, outputs)
+                except:
+                    print("Encountered Error while writing {}".format(output_file))
+
+                NUMBER_OF_NODES *= 2
+
+            PACKET_RATE += 1
+
+        MIN_SECURITY += 0.1
+
+
+    # packet_list, events = random_packets(int(PACKET_RATE * (END_TIME - START_TIME)), START_TIME, END_TIME, PACKET_SIZE,
+    #                                      MIN_SECURITY)
+    #
+    # outputs = dict()
+    # outputs['packet_rate'] = PACKET_RATE
+    # outputs['number_of_nodes'] = NUMBER_OF_NODES
+    # outputs['start_time'] = START_TIME
+    # outputs['end_time'] = END_TIME
+    # outputs['packet_size'] = PACKET_SIZE
+    # outputs['minimum_security'] = MIN_SECURITY
+    #
+    # packet_list = sorted(packet_list, key=lambda x: x.start)
+    #
+    # output_file = input("Specify output file (eg: output.txt): ")
+    #
+    # events = sorted(events, key=lambda x: x.time)
+    #
+    # master = master_node.MasterNode(number_of_processors=NUMBER_OF_NODES)
+    #
+    # packet_index = 0
+    # while len(events) > 0 and packet_index < len(packet_list):
+    #     event = events[0]
+    #     # print()
+    #     # print(event)
+    #     events = events[1:]
+    #     new_event = None
+    #     if event.category == "arrival":
+    #         # Arrival event
+    #         new_event = master.process_event(event, packet_list[packet_index])
+    #         packet_index += 1
+    #
+    #     else:
+    #         # Completion event
+    #         new_event = master.process_event(event)
+    #
+    #     if new_event is not None:
+    #         events.append(new_event)
+    #         events = sorted(events, key=lambda x: x.time)
+    #
+    # try:
+    #     outputs['guarantee_ratio'] = (PACKET_RATE*(END_TIME-START_TIME) - len(master.dropped_packets)) *\
+    #                                  (100/(PACKET_RATE*(END_TIME-START_TIME)))
+    #     outputs['average_security'] = master.total_security/((PACKET_RATE*(END_TIME-START_TIME)) -
+    #                                                          len(master.dropped_packets))
+    #     outputs['average_waiting_time'] = master.total_wait_time/((PACKET_RATE*(END_TIME-START_TIME)) -
+    #                                                               len(master.dropped_packets))
+    #     output_data(output_file, outputs)
+    # except:
+    #     print("Encountered Error while writing {}".format(output_file))
