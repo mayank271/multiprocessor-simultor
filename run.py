@@ -1,6 +1,7 @@
 from classes import master_node, packet, time_event
 import random
 import json
+import os
 
 
 def get_config():
@@ -43,23 +44,23 @@ def output(file, parameters):
 
 
 def output_data(file, parameters):
-    print("{}, {}, {}, {}, {}, {}".format(parameters['packet_rate'], parameters['number_of_nodes'],
-                                          parameters['minimum_security'], parameters['guarantee_ratio'],
-                                          parameters['average_security'], parameters['average_waiting_time']))
-    # f = open(file, "a")
-    # f.write(parameters['packet_rate'])
-    # f.write(", ")
-    # f.write(parameters['number_of_nodes'])
-    # f.write(", ")
-    # f.write(parameters['minimum_security'])
-    # f.write(", ")
-    # f.write(parameters['guarantee_ratio'])
-    # f.write(", ")
-    # f.write(parameters['average_security'])
-    # f.write(", ")
-    # f.write(parameters['average_waiting_time'])
-    # f.write("\n")
-    # f.close()
+    # print("{}, {}, {}, {}, {}, {}".format(parameters['packet_rate'], parameters['number_of_nodes'],
+    #                                       parameters['minimum_security'], parameters['guarantee_ratio'],
+    #                                       parameters['average_security'], parameters['average_waiting_time']))
+    f = open(file, "a+", encoding='utf-8')
+    f.write(str(parameters['packet_rate']))
+    f.write(", ")
+    f.write(str(parameters['number_of_nodes']))
+    f.write(", ")
+    f.write(str(parameters['minimum_security']))
+    f.write(", ")
+    f.write(str(parameters['guarantee_ratio']))
+    f.write(", ")
+    f.write(str(parameters['average_security']))
+    f.write(", ")
+    f.write(str(parameters['average_waiting_time']))
+    f.write("\n")
+    f.close()
 
 
 def random_packets(number_packets, start, end, packet_size, min_security):
@@ -92,6 +93,11 @@ if __name__ == '__main__':
 
     PACKET_RATE, NUMBER_OF_NODES, START_TIME, END_TIME, PACKET_SIZE, MIN_SECURITY = get_config()
 
+    output_file = input("Specify output file (eg: output.txt): ")
+    fi = open(output_file, "a+", encoding="utf-8")
+    fi.write("Packet Rate, Number of Nodes, Minimum Security, Guarantee Ratio, Average Security, Average Waiting Time\n")
+    fi.close()
+
     MIN_SECURITY = 0
     while MIN_SECURITY <= 10:
         PACKET_RATE = 1
@@ -112,7 +118,7 @@ if __name__ == '__main__':
 
                 packet_list = sorted(packet_list, key=lambda x: x.start)
 
-                output_file = None  # input("Specify output file (eg: output.txt): ")
+
 
                 events = sorted(events, key=lambda x: x.time)
 
@@ -146,10 +152,11 @@ if __name__ == '__main__':
                     outputs['average_waiting_time'] = master.total_wait_time / (
                                 (PACKET_RATE * (END_TIME - START_TIME)) -
                                 len(master.dropped_packets))
-                    output_data(output_file, outputs)
+
                 except:
                     print("Encountered Error while writing {}".format(output_file))
 
+                output_data(output_file, outputs)
                 NUMBER_OF_NODES *= 2
 
             PACKET_RATE += 1

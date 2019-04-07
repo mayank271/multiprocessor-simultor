@@ -3,7 +3,7 @@
     "packet_rate": 0.1,
     "number_of_nodes" : 2,
     "simulation_start_time": 0,
-    "simulation_end_time": 100000,
+    "simulation_end_time": 100,
     "packet_size" : 10,
     "set_minimum_security_level": true,
     "minimum_security_level_value": 3
