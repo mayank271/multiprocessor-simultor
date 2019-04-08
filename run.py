@@ -63,7 +63,7 @@ def output_data(file, parameters):
     f.close()
 
 
-def random_packets(number_packets, start, end, packet_size, min_security):
+def random_packets(packet_rate, start, end, packet_size, min_security):
     """
     :param number_packets: Number of packets to be generated
     :param start: Start-time of simulation
@@ -76,15 +76,18 @@ def random_packets(number_packets, start, end, packet_size, min_security):
     arrival_t = list()
 
     # RANDOM PACKETS GENERATION
-    for i in range(number_packets):
-        temp_start = round(random.uniform(start, end), 2)
-        temp_min_sec = min_security + round(random.uniform(0, 10 - min_security), 2)
-        temp_max_sec = round(random.uniform(temp_min_sec, 10), 2)
-        temp_deadline = round(random.uniform(temp_start + packet_size + temp_min_sec, end), 2)
-        temp = packet.Packet(i, temp_start, temp_deadline, temp_min_sec, temp_max_sec, packet_size)
-        packet_l.append(temp)
-        temp_time = time_event.TimeEvent(temp_start, "arrival")
-        arrival_t.append(temp_time)
+    pkt_id = 0
+    for i in range(end-start):
+        for p in range(packet_rate):
+            temp_start = i
+            temp_min_sec = min_security + round(random.uniform(0, 10 - min_security), 2)
+            temp_max_sec = round(random.uniform(temp_min_sec, 10), 2)
+            temp_deadline = round(random.uniform(temp_start + packet_size + temp_min_sec, end), 2)
+            temp = packet.Packet(pkt_id, temp_start, temp_deadline, temp_min_sec, temp_max_sec, packet_size)
+            pkt_id += 1
+            packet_l.append(temp)
+            temp_time = time_event.TimeEvent(temp_start, "arrival")
+            arrival_t.append(temp_time)
 
     return packet_l, arrival_t
 
@@ -95,7 +98,8 @@ if __name__ == '__main__':
 
     output_file = input("Specify output file (eg: output.txt): ")
     fi = open(output_file, "a+", encoding="utf-8")
-    fi.write("Packet Rate, Number of Nodes, Minimum Security, Guarantee Ratio, Average Security, Average Waiting Time\n")
+    fi.write("Packet Rate, Number of Nodes, Minimum Security, Guarantee Ratio (%), Average Security,"
+             " Average Waiting Time\n")
     fi.close()
 
     MIN_SECURITY = 0
@@ -103,8 +107,8 @@ if __name__ == '__main__':
         PACKET_RATE = 1
         while PACKET_RATE <= 100:
             NUMBER_OF_NODES = 2
-            while NUMBER_OF_NODES <= 16:
-                packet_list, events = random_packets(int(PACKET_RATE * (END_TIME - START_TIME)), START_TIME, END_TIME,
+            while NUMBER_OF_NODES <= 32:
+                packet_list, events = random_packets(PACKET_RATE, START_TIME, END_TIME,
                                                      PACKET_SIZE,
                                                      MIN_SECURITY)
 
@@ -117,8 +121,6 @@ if __name__ == '__main__':
                 outputs['minimum_security'] = MIN_SECURITY
 
                 packet_list = sorted(packet_list, key=lambda x: x.start)
-
-
 
                 events = sorted(events, key=lambda x: x.time)
 
@@ -145,12 +147,13 @@ if __name__ == '__main__':
                         events = sorted(events, key=lambda x: x.time)
 
                 try:
-                    outputs['guarantee_ratio'] = (PACKET_RATE * (END_TIME - START_TIME) - len(master.dropped_packets)) * \
-                                                 (100 / (PACKET_RATE * (END_TIME - START_TIME)))
-                    outputs['average_security'] = master.total_security / ((PACKET_RATE * (END_TIME - START_TIME)) -
+                    outputs['guarantee_ratio'] = ((int(PACKET_RATE * (END_TIME - START_TIME)) -
+                                                   len(master.dropped_packets)) * 100) / \
+                                                 (int(PACKET_RATE * (END_TIME - START_TIME)))
+                    outputs['average_security'] = master.total_security / ((int(PACKET_RATE * (END_TIME - START_TIME))) -
                                                                            len(master.dropped_packets))
                     outputs['average_waiting_time'] = master.total_wait_time / (
-                                (PACKET_RATE * (END_TIME - START_TIME)) -
+                                (int(PACKET_RATE * (END_TIME - START_TIME))) -
                                 len(master.dropped_packets))
 
                 except:

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="46465ba3-695f-43e2-a09f-08b3e74de050" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,7 +13,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Simulator$dynamic_algo.coverage" NAME="dynamic_algo Coverage Results" MODIFIED="1549194774292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Simulator$run.coverage" NAME="run Coverage Results" MODIFIED="1554658717814" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Simulator$run.coverage" NAME="run Coverage Results" MODIFIED="1554706159611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -48,12 +47,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1105">
-              <caret line="98" column="13" selection-start-line="98" selection-start-column="13" selection-end-line="98" selection-end-column="13" />
+            <state relative-caret-position="-273">
+              <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
-                <element signature="e#102#862#0" />
-                <element signature="e#899#1644#0" />
               </folding>
             </state>
           </provider>
@@ -62,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="29" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+            <state relative-caret-position="187">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
@@ -289,7 +286,10 @@
       <workItem from="1554097079917" duration="971000" />
       <workItem from="1554475138050" duration="4881000" />
       <workItem from="1554527302231" duration="815000" />
-      <workItem from="1554657883257" duration="1246000" />
+      <workItem from="1554657883257" duration="1555000" />
+      <workItem from="1554688890424" duration="37000" />
+      <workItem from="1554700861093" duration="1382000" />
+      <workItem from="1554704774467" duration="1355000" />
     </task>
     <task id="LOCAL-00001" summary="deleted unnecessary files">
       <created>1552894822583</created>
@@ -305,11 +305,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554097630339</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="run : write to file">
+      <created>1554659343854</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554659343854</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85823000" />
+    <option name="totallyTimeSpent" value="88906000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -322,8 +329,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15100671" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15704697" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -352,7 +360,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="deleted unnecessary files" />
     <MESSAGE value="modified number of packets parameter to rate" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified number of packets parameter to rate" />
+    <MESSAGE value="run : write to file" />
+    <option name="LAST_COMMIT_MESSAGE" value="run : write to file" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/packets.py" />
@@ -407,19 +416,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="29" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+        <state relative-caret-position="187">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/run.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1105">
-          <caret line="98" column="13" selection-start-line="98" selection-start-column="13" selection-end-line="98" selection-end-column="13" />
+        <state relative-caret-position="-273">
+          <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
-            <element signature="e#102#862#0" />
-            <element signature="e#899#1644#0" />
           </folding>
         </state>
       </provider>
